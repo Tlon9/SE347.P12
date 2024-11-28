@@ -1,38 +1,69 @@
 import React, { useEffect, useState } from "react";
-import Logo from "./Logo";
-import AccountButtons from "./AccountButtons";
 import HeaderNavbar from "./HeaderNavbar";
-import Slogan from "./Slogan";
 
-const HeaderContainer = () => {
-  const [scrolled, setScrolled] = useState(false);
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 50);
     };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
-
   return (
-    <div>
-      {/* Background for Header */}
-      <div className="bg-primary py-1"></div>
-
-      {/* Header */}
-      <header className={`sticky-top bg-white shadow-sm ${scrolled ? "header-scrolled" : ""}`}>
-        <div className="container d-flex justify-content-between align-items-center py-2">
-          <Logo />
-          <AccountButtons />
+    <header className={`header-container container-fluid position-fixed ${isScrolled ? "bg-white shadow-sm" : ""}`}>
+      <div className="container d-flex justify-content-between align-items-center pt-2 header__top-content">
+        <a className="d-flex align-items-center text-decoration-none" href="/">
+          {/* Logo Image */}
+          <div className="me-2">
+            <img
+              className="img-fluid"
+              src="/assets/images/logo.png"
+              alt="Travelowkey"
+              style={{ width: "6rem", height: "auto" }}
+            />
+          </div>
+          {/* Brand Name */}
+          <div>
+            <p className={`mb-0 fs-2 fw-bold fst-italic ${isScrolled? "text-dark" : "text-light"}`}>Travelowkey</p>
+          </div>
+        </a>
+        <div className="d-flex align-items-center gap-3 top-content__account-btn-group">
+          <a
+            id="btn-login"
+            className={`btn btn-sm status-btn d-flex align-items-center text-decoration-none ${
+              isScrolled ? "btn-outline-primary text-dark" : "btn-outline-light text-light"
+            } account-btn-group__login-btn`}
+            href="/user/login"
+          >
+            <i className="bi bi-person me-2"></i>
+            <span className="text">Đăng nhập</span>
+          </a>
+          <a
+            id="btn-signup"
+            className="btn btn-primary btn-sm d-flex align-items-center text-decoration-none account-btn-group__register-btn"
+            href="/user/signup"
+          >
+            <span className="text">Đăng ký</span>
+          </a>
+          <a
+            id="btn-account"
+            className="disabled btn btn-default d-flex align-items-center text-decoration-none text-light account-btn-group__account-btn"
+            href="/user/account"
+          >
+            <i className="bi bi-person-circle me-2"></i>
+            <span className="text">Tài khoản</span>
+          </a>
         </div>
-        <HeaderNavbar />
-      </header>
-
-      {/* Slogan */}
-      <Slogan />
-    </div>
+      </div>
+      <HeaderNavbar isScrolled={isScrolled} />
+    </header>
   );
 };
 
-export default HeaderContainer;
+export default Header;
+
