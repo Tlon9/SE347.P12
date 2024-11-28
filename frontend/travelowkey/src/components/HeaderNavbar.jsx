@@ -1,26 +1,42 @@
 import React from "react";
+// import "../styles/HeaderNavbar.css"; // Include your custom styles
 
-const HeaderNavbar = () => {
-  const navItems = [
-    { text: "Vé máy bay", link: "/flight/search" },
-    { text: "Xe khách", link: "/bus/search" },
-    { text: "Xe dịch vụ", link: "/transfer/search" },
-    { text: "Khách sạn", link: "/hotel/search" },
-  ];
-
+const HeaderNavbar = ({ isScrolled }) => {
   return (
-    <nav className="navbar navbar-expand-lg bg-light">
-      <div className="container-fluid">
-        <div className="navbar-nav">
-          {navItems.map((item, index) => (
-            <a key={index} className="nav-link" href={item.link}>
-              {item.text}
-            </a>
-          ))}
-        </div>
-      </div>
+    <nav className={`container d-flex align-items-center gap-3 py-2 ${
+      isScrolled ? "navbar-light" : "navbar-dark"
+    }`}>
+      <a
+        className="d-flex justify-content-center align-items-center text-decoration-none text-white rounded px-5 py-3"
+        href="/flight/search"
+        // style={{ width: "18rem", height: "5.5rem" }}
+      >
+        <div className={`text-center fw-bold fs-6 flex-grow-1 ${isScrolled ? "text-secondary" : ""}`}>Vé máy bay</div>
+      </a>
+      <a
+        className="d-flex justify-content-center align-items-center text-decoration-none text-white rounded px-5 py-3"
+        href="/bus/search"
+        // style={{ width: "18rem", height: "5.5rem" }}
+      >
+        <div className={`text-center fw-bold fs-6 flex-grow-1 ${isScrolled ? "text-secondary" : ""}`}>Xe khách</div>
+      </a>
+      <a
+        className="d-flex justify-content-center align-items-center text-decoration-none text-white rounded px-5 py-3"
+        href="/transfer/search"
+        // style={{ width: "18rem", height: "5.5rem" }}
+      >
+        <div className={`text-center fw-bold fs-6 flex-grow-1 ${isScrolled ? "text-secondary" : ""}`}>Xe dịch vụ</div>
+      </a>
+      <a
+        className="d-flex justify-content-center align-items-center text-decoration-none text-white rounded px-5 py-3"
+        href="/hotel/search"
+        // style={{ width: "18rem", height: "5.5rem" }}
+      >
+        <div className={`text-center fw-bold fs-6 flex-grow-1 ${isScrolled ? "text-secondary" : ""}`}>Khách sạn</div>
+      </a>
     </nav>
   );
 };
 
 export default HeaderNavbar;
+

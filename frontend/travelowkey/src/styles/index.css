@@ -1,0 +1,8 @@
+.disabled {
+  display: none !important;
+}
+
+.status-btn:hover, .status-btn:focus, .status-btn:not(:disabled):not(.disabled):active, .status-btn:not(:disabled):not(.disabled).active, .show > .status-btn.dropdown-toggle {
+  opacity: 0.8;
+  background: none !important;
+}/*# sourceMappingURL=index.css.map */
