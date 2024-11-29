@@ -6,3 +6,11 @@
   opacity: 0.8;
   background: none !important;
 }/*# sourceMappingURL=index.css.map */
+
+.show {
+  display: block !important;
+}
+
+.hide {
+  display: none !important;
+}
