@@ -47,7 +47,7 @@ const FeatureNavbar = () => {
               className="text-center fw-bold"
               style={{
                 flex: "1 0 0",
-                height: "1rem",
+                height: "1.5rem",
                 fontSize: "1rem",
                 color: selectedFeature === feature.type ? "#000" : "#fff",
               }}
@@ -61,7 +61,7 @@ const FeatureNavbar = () => {
             <path d="M0 1H1152" stroke="white" stroke-width="2" />
       </svg>
       {/* Feature Content */}
-      <div className="mt-4">
+      <div className="mt-1">
         {Object.entries(featureContents).map(([type, content]) => (
           <div
             key={type}

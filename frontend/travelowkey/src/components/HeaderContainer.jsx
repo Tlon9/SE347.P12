@@ -15,7 +15,7 @@ const Header = () => {
     };
   }, []);
   return (
-    <header className={`header-container container-fluid position-fixed ${isScrolled ? "bg-white shadow-sm" : ""}`}>
+    <header className={`header-container container-fluid position-fixed ${isScrolled ? "bg-white shadow-sm" : ""}`} style={{zIndex: 1000}}>
       <div className="container d-flex justify-content-between align-items-center pt-2 header__top-content">
         <a className="d-flex align-items-center text-decoration-none" href="/">
           {/* Logo Image */}

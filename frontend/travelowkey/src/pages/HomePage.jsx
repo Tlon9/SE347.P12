@@ -2,7 +2,10 @@ import React from "react";
 import HeaderContainer from "../components/HeaderContainer";
 import TopBackground from "../components/TopBackground";
 import FeatureNavbar from "../components/FeatureNavbar";
-import { height } from "@fortawesome/free-solid-svg-icons/fa0";
+import CarouselComponent from "../components/Carousel";
+import FlightRecommendation from "../components/FlightRecomendation";
+import HotelRecommendation from "../components/HotelRecomendation";
+
 
 const Homepage = () => {
   return (
@@ -18,10 +21,12 @@ const Homepage = () => {
         </div>
       </div>
       <div className="container-lg mt-5 px-5">
-      <FeatureNavbar />
+        <FeatureNavbar />
       </div>
-      <div className="container" style={{height:"100rem"}}>
-
+      <div className="container-fluid bg-white mt-5" style={{minHeight:"100rem", borderRadius: "5rem 5rem 0 0",}}>
+        <CarouselComponent />
+        <FlightRecommendation />
+        <HotelRecommendation />
       </div>  
       {/* Footer */}
       <footer className="bg-light py-3 text-center">

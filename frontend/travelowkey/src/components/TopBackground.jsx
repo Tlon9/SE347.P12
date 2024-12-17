@@ -18,7 +18,7 @@ const TopBackground = () => {
       <img
         id="background-image"
         className="w-100 h-100 position-absolute top-0 start-0 end-0"
-        style={{ zIndex: -10, objectFit: "cover" }}
+        style={{ zIndex: -10, objectFit: "cover", }}
         src={`${imageBasePath}/background${currentImage}.jpg`}
         alt="Background"
       />

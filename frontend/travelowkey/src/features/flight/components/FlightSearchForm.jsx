@@ -25,7 +25,7 @@ const FlightSearch = () => {
       .catch((err) => console.error("Error fetching locations:", err));
   }, []);
 
-  const handlePassengerChange = (type, operation) => {
+  const handlePassengerChange = (type, operation, event) => {
     setPassengerInfo((prev) => ({
       ...prev,
       [type]:
@@ -33,6 +33,7 @@ const FlightSearch = () => {
           ? Math.min(prev[type] + 1, 9)
           : Math.max(prev[type] - 1, type === "adult" ? 1 : 0),
     }));
+    event.stopPropagation();
   };
 
   const handleSubmit = () => {
@@ -69,24 +70,28 @@ const FlightSearch = () => {
             type="button"
             data-bs-toggle="dropdown"
           >
+            <i class="bi bi-people-fill px-2"></i>
             {`${passengerInfo.adult} Người lớn, ${passengerInfo.child} trẻ em, ${passengerInfo.baby} em bé`}
           </button>
           <ul className="dropdown-menu">
             {["adult", "child", "baby"].map((type) => (
               <li key={type} className="d-flex align-items-center p-2">
-                <div className="me-auto">
+                <div className="me-auto fw-normal p-2">
                   {type === "adult" ? "Người lớn" : type === "child" ? "Trẻ em" : "Em bé"}
                 </div>
+                <div className="me-auto fw-light fs-6 p-2">
+                  {type === "adult" ? "(Từ 12 tuổi)" : type ==="child" ? "(Từ 2-11 tuổi)" : "(Dưới 2 tuổi)"}
+                </div>
                 <button
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn btn-sm btn-outline-primary btn-circle"
                   onClick={() => handlePassengerChange(type, "decrease")}
                 >
                   -
                 </button>
                 <span className="mx-2">{passengerInfo[type]}</span>
                 <button
-                  className="btn btn-sm btn-outline-secondary"
-                  onClick={() => handlePassengerChange(type, "increase")}
+                  className="btn btn-sm btn-outline-primary btn-circle"
+                  onClick={(e) => handlePassengerChange(type, "increase", e)}
                 >
                   +
                 </button>
@@ -102,6 +107,7 @@ const FlightSearch = () => {
             type="button"
             data-bs-toggle="dropdown"
           >
+            <i class="bi bi-star-fill px-2"></i>
             {seatType === "economy" ? "Phổ thông" : "Thương gia"}
           </button>
           <ul className="dropdown-menu">
@@ -125,8 +131,8 @@ const FlightSearch = () => {
             Từ
           </label>
           <div className="input-group">
-            <div className="input-group-text">
-              <i className="bi bi-geo-alt"></i>
+            <div className="input-group-text text-primary">
+              <i className="bi bi-geo-alt-fill"></i>
             </div>
             <input
               id="departure"
@@ -150,8 +156,8 @@ const FlightSearch = () => {
             Đến
           </label>
           <div className="input-group">
-            <div className="input-group-text">
-              <i className="bi bi-geo-alt"></i>
+            <div className="input-group-text text-primary">
+              <i className="bi bi-geo-alt-fill"></i>
             </div>
             <input
               id="destination"
@@ -175,7 +181,7 @@ const FlightSearch = () => {
             Ngày đi
           </label>
           <div className="input-group">
-            <div className="input-group-text">
+            <div className="input-group-text text-primary">
               <i className="bi bi-calendar"></i>
             </div>
             <input
@@ -191,7 +197,7 @@ const FlightSearch = () => {
         </div>
         <div className="col-md">
           <label className="form-label text-light fw-bold d-block">&nbsp;</label>
-          <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+          <button type="button" className="btn btn-secondary text-white" onClick={handleSubmit}>
             <i className="bi bi-search"></i> 
           </button>
         </div>
