@@ -5,6 +5,7 @@ import FeatureNavbar from "../components/FeatureNavbar";
 import CarouselComponent from "../components/Carousel";
 import FlightRecommendation from "../components/FlightRecomendation";
 import HotelRecommendation from "../components/HotelRecomendation";
+import Footer from "../components/Footer";
 
 
 const Homepage = () => {
@@ -29,9 +30,7 @@ const Homepage = () => {
         <HotelRecommendation />
       </div>  
       {/* Footer */}
-      <footer className="bg-light py-3 text-center">
-        <p className="mb-0 text-muted">&copy; 2024 Travelowkey. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
