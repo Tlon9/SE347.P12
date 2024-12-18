@@ -22,3 +22,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Django specific
+*.pyc
+*.pyo
+__pycache__/
+*.sqlite3
+
+# Environment variables
+.env
+
+# Django migrations
+*/migrations/*
+
+# Static and media files
+staticfiles/
+media/
+
+# Local settings
+local_settings.py

@@ -1,0 +1,13 @@
+// custom.scss
+
+// Override Bootstrap theme colors
+// $primary: #ff5722; // Custom primary color
+$secondary: #f15b30; // Custom secondary color
+$dark: #545d61; // Custom dark color
+// $danger: #f44336; // Custom danger color
+// $success: #8bc34a; // Custom success color
+
+$bg-custom: #2c63cc;
+
+// Import Bootstrap SCSS
+@import "bootstrap/scss/bootstrap";
