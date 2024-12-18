@@ -14,7 +14,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="container-fluid bg-dark text-light bottom-0">
+    <footer className="container-fluid  text-light bottom-0" style={{background: '#202c34'}}>
       <div className="container d-flex flex-column">
         {/* Top Section */}
         <div className="footer__top-container d-flex flex-row p-2 gap-4">

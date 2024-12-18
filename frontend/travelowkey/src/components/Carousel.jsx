@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/carousel.css"; 
 import { IoArrowBackCircleOutline, IoArrowForwardCircleOutline } from "react-icons/io5";
 
-const CarouselComponent = () => {
+const CarouselComponent = ({useBackground}) => {
   const [items, setItems] = useState([
     { id: 1,  alt: "img 1" },
     { id: 2,  alt: "img 2" },
@@ -28,9 +28,9 @@ const CarouselComponent = () => {
   }, []);
 
   return (
-    <div className="container p-3">
+    <div className={`container-fluid p-3 ${useBackground ? "bg-primary" : ""}`}>
       {/* Carousel Container */}
-      <div className="carousel-container bg-white mx-auto d-flex align-items-center justify-content-center position-relative pt-5">
+      <div className={`carousel-container mx-auto d-flex align-items-center justify-content-center position-relative pt-5`}>
         {items.map((item, index) => {
           const className = `content-item content-item-${item.id}`;
           return (
@@ -48,17 +48,17 @@ const CarouselComponent = () => {
       {/* Navigation Controls */}
       <div className="carousel__nav d-flex justify-content-center align-items-center mt-5 gap-3">
         <button
-          className="btn btn-outline-secondary p-0 border-0"
+          className={`btn ${useBackground? "btn-outline-light" : "btn-outline-primary"} p-0 border-0`}
           onClick={rotateLeft}
           aria-label="Previous"
         >
           <IoArrowBackCircleOutline size={48} />
         </button>
 
-        <span className="text-uppercase fw-bold text-secondary">Xem thêm khuyến mãi</span>
+        <span className={`text-uppercase fw-bold ${useBackground ? "text-light" : "text-primary"}`}>Xem thêm khuyến mãi</span>
 
         <button
-          className="btn btn-outline-secondary p-0 border-0"
+          className={`btn ${useBackground? "btn-outline-light" : "btn-outline-primary"} p-0 border-0`}
           onClick={rotateRight}
           aria-label="Next"
         >

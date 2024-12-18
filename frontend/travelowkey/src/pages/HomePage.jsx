@@ -1,10 +1,10 @@
 import React from "react";
-import HeaderContainer from "../components/HeaderContainer";
+import Header from "../components/HeaderContainer";
 import TopBackground from "../components/TopBackground";
 import FeatureNavbar from "../components/FeatureNavbar";
 import CarouselComponent from "../components/Carousel";
-import FlightRecommendation from "../components/FlightRecomendation";
-import HotelRecommendation from "../components/HotelRecomendation";
+import FlightRecommendation from "../features/flight/components/FlightRecomendation";
+import HotelRecommendation from "../features/hotel/components/HotelRecomendation";
 import Footer from "../components/Footer";
 
 
@@ -14,7 +14,7 @@ const Homepage = () => {
       {/* Top Background */}
       <TopBackground />
       {/* Header */}
-      <HeaderContainer />
+      <Header scrollFlag={false}/>
       
       <div className="container-fluid justify-content-center" style={{paddingTop:"10rem"}}>
         <div className="fs-1 fw-bold text-light text-center">

@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
 import HeaderNavbar from "./HeaderNavbar";
 
-const Header = () => {
+const Header = ({scrollFlag}) => {
   const [isScrolled, setIsScrolled] = useState(false);
-
+  
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    if (scrollFlag) {
+      setIsScrolled(true);
+    }
+    else {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50);
+      };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
+  
   return (
     <header className={`header-container container-fluid position-fixed ${isScrolled ? "bg-white shadow-sm" : ""}`} style={{zIndex: 1000}}>
       <div className="container d-flex justify-content-between align-items-center pt-2 header__top-content">
@@ -40,15 +46,15 @@ const Header = () => {
             } account-btn-group__login-btn`}
             href="/user/login"
           >
-            <i className="bi bi-person me-2"></i>
-            <span className="text">Đăng nhập</span>
+            <i className={`bi bi-person me-2 ${isScrolled ? "text-primary" : ""}`}></i>
+            <span className={`text fw-bold ${isScrolled ? "text-primary" : ""}`}>Đăng nhập</span>
           </a>
           <a
             id="btn-signup"
             className="btn btn-primary btn-sm d-flex align-items-center text-decoration-none account-btn-group__register-btn"
             href="/user/signup"
           >
-            <span className="text">Đăng ký</span>
+            <span className={`text fw-bold`}>Đăng ký</span>
           </a>
           <a
             id="btn-account"
