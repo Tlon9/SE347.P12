@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FlightSearch from "../features/flight/components/FlightSearchForm";
+import HotelSearch from "../features/hotel/components/HotelSearchForm";
 
 const FeatureNavbar = () => {
   const [selectedFeature, setSelectedFeature] = useState("flight");
@@ -15,7 +16,7 @@ const FeatureNavbar = () => {
     flight: <FlightSearch/>,
     bus: <div className="p-4 text-light">Content for Bus</div>,
     transfer: <div className="p-4 text-light">Content for Transfer</div>,
-    hotel: <div className="p-4 text-light">Content for Hotel</div>,
+    hotel: <HotelSearch/>,
   };
 
   return (

@@ -50,7 +50,7 @@ class getHotels(APIView):
             # Find hotels by area, with pagination
             hotels = list(hotel_collection.find({
                 "Area": area,
-            }).limit(offset+limit))  # Apply skip and limit for pagination
+            }).skip(offset).limit(limit))  # Apply skip and limit for pagination
 
             # Convert ObjectId to string for each hotel
             for hotel in hotels:
