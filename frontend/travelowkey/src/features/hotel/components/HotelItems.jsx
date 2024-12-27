@@ -32,8 +32,8 @@ const HotelItems = ({ hotels, formData }) => {
     <div id="hotel-container" className="container">
         {hotels.map((hotel) => (
             <div
-            key={hotel.id}
-            id={`hotel-item-${hotel.id}`}
+            key={hotel.Id}
+            id={`hotel-item-${hotel.Id}`}
             className="hotel-item mb-3 p-2 border rounded shadow d-flex align-items-center"
             >
             {/* Left: Image */}
@@ -147,17 +147,17 @@ const HotelItems = ({ hotels, formData }) => {
   );
 };
 
-HotelItems.propTypes = {
-  hotels: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      photo: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      stars: PropTypes.number.isRequired,
-      address: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};
+// HotelItems.propTypes = {
+//   hotels: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       photo: PropTypes.string.isRequired,
+//       name: PropTypes.string.isRequired,
+//       stars: PropTypes.number.isRequired,
+//       address: PropTypes.string.isRequired,
+//       price: PropTypes.number.isRequired,
+//     })
+//   ).isRequired,
+// };
 
 export default HotelItems;
