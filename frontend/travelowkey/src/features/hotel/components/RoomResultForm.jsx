@@ -5,7 +5,9 @@ import RoomItems from "./RoomItem";
 // import {fetchRooms} from "../services.js";
 
 
-const RoomResults = ({rooms,formData, url}) => {
+const RoomResults = ({rooms,formData}) => {
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
     const [showSortDropdown, setShowSortDropdown] = useState(false);
     const [selectedSortType, setSelectedSortType] = useState("Giá thấp nhất");
     const [showStarDropdown, setShowStarDropdown] = useState(false);
@@ -155,7 +157,7 @@ const RoomResults = ({rooms,formData, url}) => {
                 </div>
     
                 {/* room Items */}
-                <RoomItems rooms={rooms} />
+                <RoomItems hotel={searchParams.get("hotelName")} rooms={rooms} passengers={searchParams.get("passengerCount")} checkInDate={formData.checkInDate} checkOutDate={formData.checkOutDate}/>
     
                 {/* Loading Block */}
                 <div className="text-center my-3">
