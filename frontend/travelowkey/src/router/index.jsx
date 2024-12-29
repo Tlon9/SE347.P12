@@ -10,6 +10,8 @@ import FlightPaymentScreen from "../features/payment/pages/FlightPayment";
 import HotelPaymentScreen from "../features/payment/pages/HotelPayment";
 import InvoiceScreen from "../features/payment/pages/Invoice";
 import HistoryPage from  "../features/payment/pages/History";
+import LoginScreen from "../features/user/pages/Login"
+import SignUpScreen from "../features/user/pages/SignUp"
 
 function AppRouter() {
   return (
@@ -25,6 +27,8 @@ function AppRouter() {
         <Route path="/payment/hotel" element={<HotelPaymentScreen />} />
         <Route path="/invoice" element={<InvoiceScreen />} />
         <Route path="/history" element={<HistoryPage />} />
+        <Route path="/user/login" element={<LoginScreen />} />
+        <Route path="/user/signup" element={<SignUpScreen />} />
       </Routes>
     </Router>
   );
