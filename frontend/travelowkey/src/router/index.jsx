@@ -12,6 +12,7 @@ import InvoiceScreen from "../features/payment/pages/Invoice";
 import HistoryPage from  "../features/payment/pages/History";
 import LoginScreen from "../features/user/pages/Login"
 import SignUpScreen from "../features/user/pages/SignUp"
+import AccountScreen from "../features/user/pages/Account"
 
 function AppRouter() {
   return (
@@ -29,6 +30,7 @@ function AppRouter() {
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/user/login" element={<LoginScreen />} />
         <Route path="/user/signup" element={<SignUpScreen />} />
+        <Route path="/user/account" element={<AccountScreen/>} />
       </Routes>
     </Router>
   );

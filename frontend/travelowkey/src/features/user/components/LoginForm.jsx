@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from "react";
-// import {getToday, fetchLocations} from "../services.js";
+import {submitLogin} from "../services.js";
 const LoginForm = () => {
 
-  useEffect(() => {
-    const initializeForm = async () => {
+    useEffect(() => {
+        const initializeForm = async () => {
+        };
+
+        initializeForm();
+    }, []);
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+
+    // Handle form input changes
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [id]: value,  // Dynamically updates the form data by input field id
+        }));
     };
 
-    initializeForm();
-  }, []);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();  // Prevent page reload on form submission
+        const {email,  password} = formData;
 
-  const handleSubmit = () => {
-    // const { departure, destination, departureDate } = formData;
-
-    // if (!departure || !destination) {
-    //   alert("Both departure and destination are required.");
-    //   return;
-    // }
-    // if (departure === destination) {
-    //   alert("Departure and destination must be different.");
-    //   return;
-    // }
-    // const passengerCount = passengerInfo.adult + passengerInfo.child + passengerInfo.baby;
-
-    // Redirect logic here
-    // window.location.href = `/flight/result?from=${departure}&to=${destination}&date=${departureDate}&seatType=${seatType}&passengerCount=${passengerCount}`;
-  };
+        // Call submit function with form data
+        submitLogin(email, password);
+    };
 
   return (
     <div className="container my-5">
@@ -37,13 +42,15 @@ const LoginForm = () => {
                 <form>
                     <div className="mb-3">
                     <label htmlFor="txt-email" className="form-label">
-                        Email/Số điện thoại di động
+                        Email
                     </label>
                     <input
                         type="text"
                         className="form-control"
-                        id="txt-email"
+                        id="email"
                         placeholder="Nhập email"
+                        value={formData.email}
+                        onChange={handleChange}
                     />
                     </div>
                     <div className="mb-3">
@@ -54,8 +61,10 @@ const LoginForm = () => {
                         <input
                         type="password"
                         className="form-control"
-                        id="txt-password"
-                        placeholder="Nhập mật khẩu"
+                        id="password"
+                        placeholder="Nhập mật khẩu"                       
+                        value={formData.password}
+                        onChange={handleChange}
                         />
                     </div>
                     </div>
@@ -69,7 +78,7 @@ const LoginForm = () => {
                         Ghi nhớ mật khẩu
                     </label>
                     </div>
-                    <button type="submit" className="btn btn-primary w-100">
+                    <button type="submit" className="btn btn-primary w-100" onClick={handleSubmit}>
                     Đăng nhập
                     </button>
                     <div className="text-center mt-3">
