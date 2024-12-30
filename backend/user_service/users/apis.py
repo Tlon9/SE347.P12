@@ -80,3 +80,20 @@ class GoogleLogin(APIView):
         except ValueError:
             return None
     import requests
+
+class get_UserInfo(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        passport = user.passport_id
+        user_info = {
+            'email': user.email,
+            'phone': user.phone_number,
+            'name': user.username,
+            'sex': user.gender,
+            'birthday': user.birthdate,
+            'nationality': user.nationality,
+            'nation': passport.nation if passport else None,
+            'expiration': passport.expiration if passport else None,
+        }
+        return Response(user_info, status=status.HTTP_200_OK)

@@ -58,7 +58,7 @@ const Header = ({scrollFlag}) => {
           </a>
           <a
             id="btn-account"
-            className="disabled btn btn-default d-flex align-items-center text-decoration-none text-light account-btn-group__account-btn"
+            className="btn btn-default d-flex align-items-center text-decoration-none text-light account-btn-group__account-btn"
             href="/user/account"
           >
             <i className="bi bi-person-circle me-2"></i>
