@@ -7,4 +7,5 @@ urlpatterns = [
     path('hello/', HelloView.as_view()),
     path('auth/login/google',GoogleLogin.as_view(), name='google-login'),
     path('user/info/', get_UserInfo.as_view(), name='user-info'),
+    path('user/verify/', VerifyUser.as_view(), name='verify'),
 ]

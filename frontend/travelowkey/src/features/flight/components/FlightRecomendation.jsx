@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 // Reusable Recommendation Item
 const RecommendationItem = ({ id, label, text, backgroundImage, onClick }) => {
@@ -50,26 +49,16 @@ const FlightRecommendation = () => {
     DLI: '0',
     DAD: '0',
   });
-
-  const [hotelData, setHotelData] = useState({
-    HAN: '0',
-    SGN: '0',
-    DAD: '0',
-    VTU: '0',
-  });
-
   const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
   useEffect(() => {
     // Fetch Flight Data
-    axios.get(`/flight/api/recom-flight?date=${today}`).then((res) => {
-      setFlightData(res.data);
-    });
+    fetch(`http://127.0.0.1:8000/flights/getFlighCount?date=${today}`)
+      .then((response) => response.json())
+      .then((data) => setFlightData(data))
+      .catch((error) => console.error('Error fetching flight data:', error));
 
-    // Fetch Hotel Data
-    axios.get('/hotel/api/recom-hotel').then((res) => {
-      setHotelData(res.data);
-    });
+    
   }, []);
 
   const handleFlightClick = (location) => {
