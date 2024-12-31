@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { loadPaymentHistory } from "../services";
 
 const HistoryPage = () => {
     const [loading, setLoading] = useState(true);
@@ -12,12 +13,7 @@ const HistoryPage = () => {
         const fetchPaymentHistory = async () => {
             setLoading(true);
             try {
-                // Replace with your API endpoint
-                const response = await fetch("http://127.0.0.1:8080/payment/history");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch payment history");
-                }
-                const data = await response.json();
+                const data = await loadPaymentHistory();
                 setPaymentHistory(data);
             } catch (err) {
                 setError(err.message);
@@ -30,7 +26,7 @@ const HistoryPage = () => {
     }, []);
 
     const handleItemClick = (transactionId, service) => {
-        navigate("/invoice", { state: { transactionId, service } });
+        navigate("/invoice?transactionId=" + transactionId + "&service=" + service);
     };
 
     const renderPaymentHistoryList = (history) => {
@@ -45,7 +41,7 @@ const HistoryPage = () => {
                     </p>
                     <p className="card-text">
                         <strong>Ngày tạo:</strong>{" "}
-                        {new Date(payment.date).toLocaleString("vi-VN")}
+                        {new Date(payment.created_at).toLocaleString("vi-VN")}
                     </p>
                     <p className="card-text">
                         <strong>Trạng thái:</strong>{" "}
@@ -67,7 +63,7 @@ const HistoryPage = () => {
                     </p>
                     <button
                         className="btn btn-primary"
-                        onClick={() => handleItemClick(payment.id, payment.service)}
+                        onClick={() => handleItemClick(payment._id, payment.service)}
                     >
                         Xem chi tiết
                     </button>

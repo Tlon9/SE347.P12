@@ -97,3 +97,10 @@ class get_UserInfo(APIView):
             'expiration': passport.expiration if passport else None,
         }
         return Response(user_info, status=status.HTTP_200_OK)
+
+
+class VerifyUser(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        return Response({"message": "User is authenticated", "user_id": user.id}, status=status.HTTP_200_OK)

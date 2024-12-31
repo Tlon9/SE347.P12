@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import QRCodeModal from "./QRCode";
+import { loadPaymentURL } from "../services";
 
 const FlightPaymentForm = ({ flight, passengers }) => {
     const [selectedMethod, setSelectedMethod] = useState("atm");
@@ -20,21 +21,7 @@ const FlightPaymentForm = ({ flight, passengers }) => {
         setError(null);
 
         try {
-            // Replace this URL with your actual backend endpoint
-            const response = await fetch("http://127.0.0.1:8080/payment/create/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    // Authorization: `Bearer YOUR_ACCESS_TOKEN`, // Replace with your actual token logic
-                },
-                body: JSON.stringify(paymentInfo),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to process payment: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await loadPaymentURL(paymentInfo);
             const transactionId = data.transaction_id;
 
             if (data.url && data.url !== "QR_code") {
@@ -45,7 +32,6 @@ const FlightPaymentForm = ({ flight, passengers }) => {
                 setTransactionId(transactionId);
                 setShowModal(true);
                 // alert("Display QR Code here for transaction ID: " + transactionId);
-                // You can replace the alert with a modal to display the QR code
             }
 
             // Poll for payment status

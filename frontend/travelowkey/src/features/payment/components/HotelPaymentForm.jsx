@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import QRCodeModal from "./QRCode";
+import { loadPaymentURL } from "../services";
+
 
 const HotelPaymentForm = ({ hotel, room, checkInDate, checkOutDate }) => {
     const [selectedMethod, setSelectedMethod] = useState("atm");
@@ -26,19 +28,7 @@ const HotelPaymentForm = ({ hotel, room, checkInDate, checkOutDate }) => {
         setError(null);
 
         try {
-            const response = await fetch("http://127.0.0.1:8080/payment/create/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(paymentInfo),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to process payment: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await loadPaymentURL(paymentInfo);
             const transactionId = data.transaction_id;
 
             if (data.url && data.url !== "QR_code") {

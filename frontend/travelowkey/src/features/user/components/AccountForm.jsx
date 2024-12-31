@@ -3,6 +3,7 @@ import "../account.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import {deleteCookie, getCookie, refreshToken, loadUserInfo} from "../account.js";
+import HistoryForm from "../../payment/components/HistoryForm.jsx";
 
 const AccountForm = () => {
   const [activeTab, setActiveTab] = useState("user-pane"); // Current active tab
@@ -217,9 +218,9 @@ const AccountForm = () => {
         {/* Bill History Pane */}
         {activeTab === "bill-pane" && (
           <div className="account-content-pane">
-            <h3>Lịch sử thanh toán</h3>
+            {/* <h3>Lịch sử thanh toán</h3> */}
             <div id="bill-container">
-              {/* Bill details go here */}
+              <HistoryForm />
             </div>
           </div>
         )}
