@@ -18,9 +18,9 @@ const HeaderNavbar = ({ isScrolled }) => {
 
   const navItems = [
     { href: "/flight/search", label: "Vé máy bay" },
+    { href: "/hotel/search", label: "Khách sạn" },
     { href: "/bus/search", label: "Xe khách" },
     { href: "/transfer/search", label: "Xe dịch vụ" },
-    { href: "/hotel/search", label: "Khách sạn" },
   ];
 
   return (

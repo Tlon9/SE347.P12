@@ -1,3 +1,4 @@
+import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 import React from "react";
 
 const FlightItems = ({ flights, passengers }) => {
@@ -9,8 +10,14 @@ const FlightItems = ({ flights, passengers }) => {
    };
 
    if (!flights || flights.length === 0) {
-      return <div className="title">Không tìm thấy kết quả phù hợp</div>;
+      return <div className="title" style={{minHeight:"20rem"}}>Không tìm thấy kết quả phù hợp</div>;
    }
+   const iconList = {
+      "Vietnam Airlines": "/assets/images/Vietnam Airlines.png",
+      "VietJet Air": "/assets/images/VietJet Air.png",
+      "Bamboo Airways": "/assets/images/Bamboo Airways.png",
+      "Vietravel Airlines": "/assets/images/Vietravel Airlines.png",
+  }
    const navigateToPaymentScreen = (flight, passengers) => {
       const params = new URLSearchParams({
          id: flight.Id,
@@ -33,12 +40,13 @@ const FlightItems = ({ flights, passengers }) => {
                id={`result-item-${flight.Id}`}
                className="result-item mb-4 p-3 border rounded shadow"
             >
-               <div className="row align-items-center">
+               <div className="row align-items-center justify-content-between">
                   <div className="col-md-3 d-flex align-items-center">
-                     <i className="bi bi-airplane-fill me-2"></i>
-                     <div className="text">{flight.Name}</div>
+                     {flight.Name in iconList ? (<img src={iconList[flight.Name]} alt={flight.Name} className="icon" style={{width: "2rem", height: "1rem"}}/>) : (<i className="bi bi-airplane-fill me-2"></i>)}
+                     {/* <i className="bi bi-airplane-fill me-2"></i> */}
+                     <div className="text fw-bold px-1">{flight.Name}</div>
                   </div>
-                  <div className="col-md-6 d-flex justify-content-between">
+                  <div className="col-md-5 d-flex justify-content-between">
                      <div className="departure">
                         <div className="time fw-bold">
                            {flight.DepartureTime}
@@ -51,7 +59,7 @@ const FlightItems = ({ flights, passengers }) => {
                         <div className="location">{flight.To}</div>
                      </div>
                   </div>
-                  <div className="col-md-3 text-end">
+                  <div className="col-md-3 text-end d-flex justify-content-end">
                      <div className="price-text fw-bold text-danger">
                         {changeMoneyFormat(flight.Price)} VND
                      </div>

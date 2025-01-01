@@ -7,6 +7,7 @@ import Footer from "../../../components/Footer";
 
 const FlightSearchScreen = () => {
   const [recommendedFlights, setRecommendedFlights] = useState([]);
+  const recomImgList = ['angiang','cantho','dalat', 'haiphong','hanoi', 'hatinh', 'hcm', 'khanhhoa', 'lamdong','phuquoc']
   useEffect(() => {
     const getCookie = (name) => {
       const value = `; ${document.cookie}`;
@@ -64,7 +65,7 @@ const FlightSearchScreen = () => {
       <HeaderContainer scrollFlag={true}/>
       <div className="container-fluid justify-content-center" style={{paddingTop:"8rem"}}></div>
       <CarouselComponent useBackground={true}/>
-      <div className="container-lg shadow px-5">
+      <div className="container-lg shadow rounded px-5 py-3">
         <FlightSearch searchPage={true} />
       </div>
       <FlightRecommendation />
@@ -77,13 +78,13 @@ const FlightSearchScreen = () => {
               style={{ minWidth: '150px', flex: '0 0 auto', borderRadius: '16px', overflow: 'hidden' }}
             >
               {/* Flight Image */}
-              <img 
-                src="path_to_placeholder_image/destinationcard_form.png" 
-                className="card-img-top" 
-                alt={`${flight.Name}`} 
-                style={{ height: '100px', objectFit: 'cover' }}
-              />
-              {/* Card Body */}
+                      <img 
+                      src={`/assets/images/recom-${recomImgList[Math.floor(Math.random() * recomImgList.length)]}.jpg`} 
+                      className="card-img-top" 
+                      alt={`${flight.Name}`} 
+                      style={{ height: '100px', objectFit: 'cover' }}
+                      />
+                      {/* Card Body */}
               <div className="card-body p-2">
                 <h6 className="card-title text-truncate" title={flight.Name}>
                   {flight.Name}

@@ -115,7 +115,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="footer__bottom-container d-flex flex-column align-items-center p-2">
           <div>Trường Đại học Công nghệ thông tin - ĐHQG TPHCM</div>
-          <div>Copyright © 2003 - 2023 Travelowkey Inc.</div>
+          <div>Copyright © 2003 - 2025 Travelowkey Inc.</div>
         </div>
       </div>
     </footer>

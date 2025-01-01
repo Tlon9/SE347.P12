@@ -45,7 +45,7 @@ export const loadUserInfo = async () => {
         window.location.href = '/user/login';
         return;
     }
-    const response = await fetch('http://127.0.0.1:8800/user/info/', {
+    const response = await fetch('http://127.0.0.1:8800/user/', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

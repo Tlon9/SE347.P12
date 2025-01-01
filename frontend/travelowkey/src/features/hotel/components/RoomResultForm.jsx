@@ -146,7 +146,7 @@ const RoomResults = ({rooms,formData}) => {
                 <div className="bg-white rounded shadow p-3 d-flex justify-content-between align-items-start mb-3">
                     <div>
                     <div className="d-flex align-items-center">
-                        <div className="fw-bold"></div> {formData.name ||"N/A"}
+                        <div className="fw-bold">{formData.name ||"N/A"}</div> 
                     </div>
                     <div className="text-muted">
                     </div> {formData.checkInDate + " - " + formData.checkOutDate + " • " + formData.passengerCount + " người, " + formData.roomCount + " phòng"|| "N/A"}

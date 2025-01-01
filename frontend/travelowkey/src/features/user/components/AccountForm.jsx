@@ -16,6 +16,7 @@ const AccountForm = () => {
     phone: "",
     passportNation: "",
     passportExpiry: "",
+    score: ""
   });
 
   // Handles tab navigation
@@ -69,6 +70,7 @@ const AccountForm = () => {
           phone: userInfo.phone,
           passportNation: userInfo.nation,
           passportExpiry: userInfo.expiration,
+          score: userInfo.score
         });
       }
     } catch (error) {
@@ -137,8 +139,9 @@ const AccountForm = () => {
         {/* User Information Pane */}
         {activeTab === "user-pane" && (
           <div className="account-content-pane" id="user-pane">
-            <div className="pane-label">
+            <div className="pane-label d-flex justify-content-between">
                 <div className="label-text">Thông tin cá nhân</div>
+                <div className="label-score fw-bold text-secondary">Điểm thưởng: {formData.score}</div>
             </div>
             <form className="info-form" id="user-info-form">
                 <div id="warning-auth">

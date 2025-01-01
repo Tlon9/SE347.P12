@@ -10,8 +10,8 @@ export const getCookie = async (name) => {
 };
 
 export const refreshToken = async () => {
-    console.log('refreshToken');
     const refresh_token = await getCookie('refresh_token');
+    console.log(refresh_token);
     if (!refresh_token) {
         alert('Cần đăng nhập lại');
         window.location.href = '/user/login';
@@ -67,14 +67,14 @@ export const  loadPaymentHistory = async () => {
     }
 }
 
-export const loadPaymentURL = async (paymentInfo) => {
+export const loadPaymentURL = async (paymentInfo,useScore) => {
     let access_token = await getCookie('access_token');
     if (!access_token) {
         alert('Cần đăng nhập');
         window.location.href = '/user/login';
         return;
     }
-    const response = await fetch('http://127.0.0.1:8080/payment/create/', {
+    const response = await fetch(`http://127.0.0.1:8080/payment/create/?use_score=${useScore}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -95,5 +95,34 @@ export const loadPaymentURL = async (paymentInfo) => {
         alert(response.status);
         alert('Cần đăng nhập lại');
         window.location.href = '/user/login';
+    }
+}
+
+export const fetchUserScore = async () => {
+    let access_token = await getCookie('access_token');
+    if (!access_token) {
+        alert('Cần đăng nhập');
+        window.location.href = '/user/login';
+        return;
+    }
+    const response = await fetch('http://127.0.0.1:8800/user/score/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access_token}`,
+        },
+    });
+    if (response.status === 200) {
+        const data = await response.json();
+        return data;
+    }
+    else if (response.status === 401) {
+        const newToken = await refreshToken();
+        if (newToken) {
+            await fetchUserScore();
+        }
+    }
+    else {
+        return {"score": -1};
     }
 }

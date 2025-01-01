@@ -61,9 +61,9 @@ const HotelSearch = ({searchPage}) => {
 
     const handleSubmit = () => {
         const { location, checkinDate, checkoutDate } = hotelSearchInfo;
-        if (!location) return alert('Location is required');
-        if (!checkinDate || !checkoutDate) return alert('Dates are required');
-        if (new Date(checkinDate) > new Date(checkoutDate)) return alert('Checkin date must be before checkout date');
+        if (!location) return alert('Địa điểm không được để trống');
+        if (!checkinDate || !checkoutDate) return alert('Ngày đặt phòng không được để trống');
+        if (new Date(checkinDate) >= new Date(checkoutDate)) return alert('Ngày nhận phòng không thể cùng sau ngày trả phòng');
 
         sessionStorage.setItem('HotelSearchInfo', JSON.stringify(hotelSearchInfo));
         const passengerCount = passengerInfo.adult + passengerInfo.child;
@@ -101,8 +101,8 @@ const HotelSearch = ({searchPage}) => {
     // const today = new Date().toISOString().split('T')[0];
 
     return (
-        <div className="container">
-            <div className={`container-fluid ${searchPage ? "bg-primary" : ""}`}>
+        <div className="container py-3 rounded">
+            <div className={`container-fluid rounded ${searchPage ? "bg-primary" : ""}`}>
                 <div className={`d-flex gap-3 mb-3 ${searchPage ? "text-dark" : "text-light"}`}>
                     {/* Passenger Dropdown */}
                     <div className="dropdown">
@@ -142,58 +142,67 @@ const HotelSearch = ({searchPage}) => {
                     </div>
                 </div>
             </div>
-            <div className="row mb-4">
-                <div className="col">
-                    <label htmlFor="hotelLocation" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Thành phố, địa điểm hoặc tên khách sạn</label>
-                    <input
-                        id="hotelLocation"
-                        className="form-control"
-                        type="text"
-                        placeholder="Địa điểm"
-                        value={hotelSearchInfo.location}
-                        onChange={e => setHotelSearchInfo({ ...hotelSearchInfo, location: e.target.value })}
-                        list="locationList"
-                    />
-                    <datalist id="locationList">
-                        {locations.areas.map((loc, index) => (
-                            <option key={index} value={loc} />
-                        ))}
-                    </datalist>
+            <div className="d-flex justify-content-between row g-3 rounded">
+                <div className="col-md-4">
+                        <label htmlFor="hotelLocation" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Thành phố, địa điểm hoặc tên khách sạn</label>
+                        <input
+                            id="hotelLocation"
+                            className="form-control"
+                            type="text"
+                            placeholder="Địa điểm"
+                            value={hotelSearchInfo.location}
+                            onChange={e => setHotelSearchInfo({ ...hotelSearchInfo, location: e.target.value })}
+                            list="locationList"
+                        />
+                        <datalist id="locationList">
+                            {locations.areas.map((loc, index) => (
+                                <option key={index} value={loc} />
+                            ))}
+                        </datalist>
                 </div>
-            </div>
 
-            <div className="row mb-4">
-                <label htmlFor="checkinDate" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Ngày nhận phòng</label>
-                <div className="input-group">
-                    <div className="input-group-text text-primary">
-                    <i className="bi bi-calendar"></i>
-                    </div>
-                    <input
-                        id="checkinDate"
-                        className="form-control"
-                        type="date"
-                        value={hotelSearchInfo.checkinDate}
-                        min={today}
-                        onChange={(e) =>
-                            setHotelSearchInfo((prev) => ({ ...prev, checkinDate: e.target.value }))
-                        }
-                    />
-                </div>
-                <label htmlFor="checkoutDate" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Ngày trả phòng</label>
-                <div className="input-group">
-                    <div className="input-group-text text-primary">
+                <div className="col-md-3">
+                    <label htmlFor="checkinDate" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Ngày nhận phòng</label>
+                    <div className="input-group">
+                        <div className="input-group-text text-primary">
                         <i className="bi bi-calendar"></i>
+                        </div>
+                        <input
+                            id="checkinDate"
+                            className="form-control"
+                            type="date"
+                            value={hotelSearchInfo.checkinDate}
+                            min={today}
+                            onChange={(e) =>
+                                setHotelSearchInfo((prev) => ({ ...prev, checkinDate: e.target.value }))
+                            }
+                        />
                     </div>
-                    <input
-                        id="checkoutDate"
-                        className="form-control"
-                        type="date"
-                        value={hotelSearchInfo.checkoutDate}
-                        min={today}
-                        onChange={(e) =>
-                            setHotelSearchInfo((prev) => ({ ...prev, checkoutDate: e.target.value }))
-                        }
-                    />
+                </div>
+                <div className="col-md-3">
+                    <label htmlFor="checkoutDate" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>Ngày trả phòng</label>
+                    <div className="input-group">
+                        <div className="input-group-text text-primary">
+                            <i className="bi bi-calendar"></i>
+                        </div>
+                        <input
+                            id="checkoutDate"
+                            className="form-control"
+                            type="date"
+                            value={hotelSearchInfo.checkoutDate}
+                            min={today}
+                            onChange={(e) =>
+                                setHotelSearchInfo((prev) => ({ ...prev, checkoutDate: e.target.value }))
+                            }
+                        />
+                    </div>
+                </div>
+                <div className="col-md">
+                    <label className="form-label text-light fw-bold d-block">&nbsp;</label>
+                    <button className="btn btn-secondary text-white" onClick={handleSubmit}>
+                        <i className="bi bi-search"> </i> 
+                        Tìm khách sạn
+                    </button>
                 </div>
             </div>
 
@@ -246,13 +255,8 @@ const HotelSearch = ({searchPage}) => {
                 </div>
             </div> */}
 
-            <div className="row">
-                <div className="col text-center">
-                    <button className="btn btn-primary" onClick={handleSubmit}>Tìm khách sạn</button>
-                </div>
-            </div>
 
-            <div className="row mt-5">
+            {/* <div className="row mt-5">
                 <h5 className="text-center">Điểm đến hot nhất do Travelowkey đề xuất</h5>
                 <div className="d-flex justify-content-center">
                     {Object.entries(recommendations).map(([key, value]) => (
@@ -269,7 +273,7 @@ const HotelSearch = ({searchPage}) => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
