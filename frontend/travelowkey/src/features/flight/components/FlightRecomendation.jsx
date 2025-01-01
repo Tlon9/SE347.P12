@@ -82,28 +82,28 @@ const FlightRecommendation = () => {
           id="item-hanoi-flight"
           label="Hà Nội"
           text={`Có ${flightData.HAN} chuyến bay`}
-          backgroundImage="/assets/images/hotel-recom-hanoi.jpeg"
+          backgroundImage="/assets/images/recom-hanoi.jpg"
           onClick={() => handleFlightClick('Hà Nội (HAN)')}
         />
         <RecommendationItem
           id="item-hcm-flight"
           label="Hồ Chí Minh"
           text={`Có ${flightData.SGN} chuyến bay`}
-          backgroundImage="/assets/images/hotel-recom-hcm.jpeg"
+          backgroundImage="/assets/images/recom-hcm.jpg"
           onClick={() => handleFlightClick('TP HCM (SGN)')}
         />
         <RecommendationItem
           id="item-danang-flight"
           label="Đà Nẵng"
           text={`Có ${flightData.DAD} chuyến bay`}
-          backgroundImage="/assets/images/recom-phuquoc.jpeg"
+          backgroundImage="/assets/images/recom-danang.jpg"
           onClick={() => handleFlightClick('Đà Nẵng (DAD)')}
         />
         <RecommendationItem
           id="item-dalat-flight"
           label="Đà Lạt"
           text={`Có ${flightData.DLI} chuyến bay`}
-          backgroundImage="/assets/images/recom-dalat.jpeg"
+          backgroundImage="/assets/images/recom-dalat.jpg"
           onClick={() => handleFlightClick('Đà Lạt (DLI)')}
         />
       </div>

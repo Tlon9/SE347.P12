@@ -24,7 +24,7 @@ const Homepage = () => {
       <div className="container-lg mt-5 px-5">
         <FeatureNavbar />
       </div>
-      <div className="container-fluid bg-white mt-5" style={{minHeight:"100rem", borderRadius: "5rem 5rem 0 0",}}>
+      <div className="container-fluid bg-white mt-5" style={{minHeight:"80rem", borderRadius: "5rem 5rem 0 0",}}>
         <CarouselComponent />
         <FlightRecommendation />
         <HotelRecommendation />

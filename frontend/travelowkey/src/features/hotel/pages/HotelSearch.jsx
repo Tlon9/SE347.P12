@@ -19,6 +19,8 @@ const HotelSearchScreen = () => {
   const roomCount = 1;
   const passengerCount = 1;
   const [recommendedHotels, setRecommendedhotels] = useState([]);
+  const recomImgList = ['angiang','cantho','dalat', 'haiphong','hanoi', 'hatinh', 'hcm', 'khanhhoa', 'lamdong','phuquoc']
+ 
     useEffect(() => {
       const getCookie = (name) => {
         const value = `; ${document.cookie}`;
@@ -76,7 +78,7 @@ const HotelSearchScreen = () => {
       <HeaderContainer scrollFlag={true}/>
       <div className="container-fluid justify-content-center" style={{paddingTop:"8rem"}}></div>
       <CarouselComponent useBackground={true}/>
-      <div className="container-lg shadow px-5">
+      <div className="container-lg shadow px-5 py-3">
         <HotelSearch searchPage={true} />
       </div>
       <HotelRecommendation />
@@ -86,11 +88,11 @@ const HotelSearchScreen = () => {
             <div 
               key={idx} 
               className="card mb-2 mx-2" 
-              style={{ minWidth: '150px', flex: '0 0 auto', borderRadius: '16px', overflow: 'hidden' }}
+              style={{ width: '250px', flex: '0 0 auto', borderRadius: '16px', overflow: 'hidden' }}
             >
               {/* Hotel Image */}
               <img 
-                src="path_to_placeholder_image/destinationcard_form.png" 
+                src={`/assets/images/recom-${recomImgList[Math.floor(Math.random() * recomImgList.length)]}.jpg`} 
                 className="card-img-top" 
                 alt={`${hotel.Name}`} 
                 style={{ height: '100px', objectFit: 'cover' }}

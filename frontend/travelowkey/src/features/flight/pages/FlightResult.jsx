@@ -22,7 +22,7 @@ const FlightResult = () => {
     return (
         <div>
             <HeaderContainer scrollFlag={true} />
-            <div className="container-fluid justify-content-center" style={{ paddingTop: "8rem" }}></div>
+            <div className="container-fluid justify-content-center" style={{ paddingTop: "8rem", background: "rgb(247, 249, 259)"}}></div>
             {loading ? (
                 <div className="text-center my-3">
                     <div className="fw-bold text-primary">Đang tìm kiếm chuyến bay</div>

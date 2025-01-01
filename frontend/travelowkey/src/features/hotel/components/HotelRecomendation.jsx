@@ -94,7 +94,7 @@ const HotelRecommendation = () => {
           id="item-danang-hotel"
           label="Đà Nẵng"
           text={`Có ${hotelData.DAD} khách sạn`}
-          backgroundImage="/assets/images/recom-phuquoc.jpeg"
+          backgroundImage="/assets/images/recom-phuquoc.jpg"
           onClick={() => handleHotelClick('Đà Nẵng (DAD)')}
         />
         <RecommendationItem

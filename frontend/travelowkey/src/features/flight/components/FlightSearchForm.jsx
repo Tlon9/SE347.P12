@@ -51,11 +51,11 @@ const FlightSearch = ({searchPage}) => {
     const { departure, destination, departureDate } = formData;
 
     if (!departure || !destination) {
-      alert("Both departure and destination are required.");
+      alert("Điểm đi và điểm đến không được để trống.");
       return;
     }
     if (departure === destination) {
-      alert("Departure and destination must be different.");
+      alert("Điểm đi và điểm đến không được trùng nhau.");
       return;
     }
     const passengerCount = passengerInfo.adult + passengerInfo.child + passengerInfo.baby;
@@ -73,8 +73,8 @@ const FlightSearch = ({searchPage}) => {
   };
 
   return (
-    <div className="container-fluid py-3">
-      <div className={`container-fluid ${searchPage ? "bg-primary" : ""}`}>
+    <div className="container-fluid py-3 rounded">
+      <div className={`container-fluid rounded ${searchPage ? "bg-primary" : ""}`}>
         <div className={`d-flex gap-3 mb-3 ${searchPage ? "text-dark" : "text-light"}`}>
           {/* Passenger Dropdown */}
           <div className="dropdown">
@@ -119,7 +119,7 @@ const FlightSearch = ({searchPage}) => {
               className="btn btn-primary dropdown-toggle"
               type="button"
               data-bs-toggle="dropdown"
-              style={{ opacity: 0.9 }}
+              style={{ opacity: 0.9, width: "200px"}}
             >
               <i class="bi bi-star-fill px-2"></i>
               {seatType === "" ? "Phổ thông" : seatType }
@@ -140,7 +140,7 @@ const FlightSearch = ({searchPage}) => {
       </div>
 
       {/* Flight Search Form */}
-      <form className="d-flex justify-content-between row g-3">
+      <form className="d-flex justify-content-between row g-3 rounded">
         <div className="col-md-4">
           <label htmlFor="departure" className={`form-label ${searchPage ? "text-dark" : "text-light"} fw-bold`}>
             Từ

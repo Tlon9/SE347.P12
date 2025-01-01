@@ -100,12 +100,12 @@ const RoomItems = ({ hotel,rooms, passengers, checkInDate, checkOutDate}) => {
                     className="room-price text-end"
                     style={{ fontSize: "0.9rem", lineHeight: "1rem" }}
                     >
-                        <div className="price-text fw-bold">{changeMoneyFormat(room.Price)}</div>
+                        <div className="price-text text-danger fw-bold">{changeMoneyFormat(room.Price)}</div>
                     </div>
                     <div className="row mt-2">
                         <div className="col d-flex justify-content-end">
                             <button
-                            className="btn btn-secondary text-white"
+                            className="btn btn-primary text-white"
                             style={{ fontSize: "0.9rem", width: "100px" }}
                             onClick={() => navigateToPaymentScreen(hotel,room, passengers)}
                             >

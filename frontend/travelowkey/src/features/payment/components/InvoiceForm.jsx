@@ -84,8 +84,8 @@ const InvoiceForm = () => {
     }
 
     return (
-        <div className="container my-4">
-            <div className="card shadow-sm p-3">
+        <div className="container my-4 d-flex flex-column" style={{ maxWidth: "40rem" }}>
+            <div className="card shadow p-3">
                 <h4 className="text-primary mb-3">Thông tin hóa đơn</h4>
                 {service === "flight" && details && (
                     <div>
@@ -125,11 +125,11 @@ const InvoiceForm = () => {
                             <strong>Mã giao dịch:</strong> {transactionId}
                         </p>
                         <p>
-                            <strong>Ngày thanh toán:</strong> {transaction.created_at}
+                            <strong>Ngày thanh toán:</strong> {new Date(transaction.created_at).toLocaleString("vi-VN")}
                         </p>
                         <p>
                             <strong>Tổng tiền:</strong>{" "}
-                            <span className="text-danger">
+                            <span className="text-danger fw-bold">
                                 {formatMoney(transaction.amount)}
                             </span>
                         </p>
@@ -146,8 +146,9 @@ const InvoiceForm = () => {
                 )}
             </div>
             <button
-                className="btn btn-primary mt-4"
+                className="btn btn-primary mt-4 align-self-center"
                 onClick={() => navigate("/")}
+                style={{ maxWidth: "20rem" }}
             >
                 Trở về trang chủ
             </button>
