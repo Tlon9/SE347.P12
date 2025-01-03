@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import "../account.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import {deleteCookie, getCookie, refreshToken, loadUserInfo} from "../account.js";
+import {deleteCookie, getCookie, refreshToken, loadUserInfo, saveUserInfo, savePasswordInfo} from "../account.js";
 import HistoryForm from "../../payment/components/HistoryForm.jsx";
 
 const AccountForm = () => {
   const [activeTab, setActiveTab] = useState("user-pane"); // Current active tab
   const [formData, setFormData] = useState({
     name: "",
-    gender: "Male",
+    gender: "",
     birthDate: "",
     email: "",
     nationality: "",
@@ -17,6 +17,12 @@ const AccountForm = () => {
     passportNation: "",
     passportExpiry: "",
     score: ""
+  });
+
+  const [formPasswordData, setFormPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    newPasswordConfirmation: "",
   });
 
   // Handles tab navigation
@@ -33,11 +39,16 @@ const AccountForm = () => {
 
   // Handles logout functionality
   const handleLogout = async () => {
-    const accessToken = getCookie("access_token");
-    const refreshToken = getCookie("refresh_token");
+    const accessToken = await getCookie("access_token");
+    const refreshToken = await getCookie("refresh_token");
+
+    if (!accessToken || !refreshToken) {
+      alert("You are already logged out.");
+      return;
+    }
 
     try {
-      const response = await fetch("/user/api/logout/", {
+      const response = await fetch("http://127.0.0.1:8800/user/logout/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,11 +59,15 @@ const AccountForm = () => {
 
       if (response.ok) {
         deleteCookie("access_token");
+        // deleteCookie("refresh_token");
         window.location.href = "/";
       } else {
+        const errorData = await response.json();
+      console.error("Logout failed:", errorData);
         alert("Failed to log out.");
       }
     } catch (error) {
+      console.error("Error during logout:", error);
       console.error("Error during logout:", error);
     }
   };
@@ -79,15 +94,19 @@ const AccountForm = () => {
   };
 
 
-  // Synchronizes the active tab with the URL query parameter
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const nav = urlParams.get("nav");
-    if (nav === "bill-pane") {
-      setActiveTab("bill-pane");
-    } else {
-      setActiveTab("user-pane");
-    }
+    const initializeTab = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const nav = urlParams.get("nav");
+      if (nav === "bill-pane") {
+        setActiveTab("bill-pane");
+      } else {
+        setActiveTab("user-pane");
+        await fetchUserInfo();
+      }
+    };
+  
+    initializeTab(); // Call the async function
   }, []);
 
   // Handles form field changes
@@ -99,10 +118,35 @@ const AccountForm = () => {
     }));
   };
 
+  const handleInputPasswordChange = (e) => {
+    const { id, value } = e.target;
+    setFormPasswordData((prevFormPasswordData) => ({
+      ...prevFormPasswordData,
+      [id]: value
+    }));
+  }
+
   // Handles form submission
-  const handleFormSave = () => {
-    console.log("Form data submitted:", formData);
-    // Add form submission logic here (e.g., API call)
+  const handleFormSave = async () => {
+    await saveUserInfo(formData); // Call the save function
+  };
+
+  const handleFormPasswordSave = async () => {
+    await savePasswordInfo(formPasswordData); // Call the save function
+  };
+
+  const handleFormCancel = async () => {
+    await fetchUserInfo(); // Call the save function
+  };
+
+  const initialPasswordData = {
+    oldPassword: "",
+    newPassword: "",
+    newPasswordConfirmation: "",
+  };
+  
+  const handleFormPasswordCancel = () => {
+    setFormPasswordData(initialPasswordData);
   };
 
   return (
@@ -159,16 +203,24 @@ const AccountForm = () => {
                             <div className="title">
                                 <div className="text">Giới tính:</div>
                             </div>
-                            <select id="gender" className="input form-input">
-                                <option value="Male">Nam</option>
-                                <option value="Female">Nữ</option>
+                            <select id="gender" className="input form-input" value={formData.gender} onChange={handleInputChange}>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
                             </select>
                         </div>
                         <div className="input-block">
                             <div className="title">
                                 <div className="text">Ngày sinh:</div>
                             </div>
-                            <input className="input form-input" type="date" id="birthDate" value={formData.birthDate} onChange={handleInputChange}/>
+                            <div className="input-group">
+                              <input
+                                  id="birthDate"
+                                  className="input form-input"
+                                  type="date"
+                                  value={formData.birthDate}
+                                  onChange={handleInputChange}
+                              />
+                            </div>
                         </div>
                     </div>
                     <div className="info-col" id="user-info-col-2">
@@ -202,18 +254,67 @@ const AccountForm = () => {
                             <div className="title">
                                 <div className="text">Ngày hết hạn hộ chiếu:</div>
                             </div>
-                            <input className="input form-input" type="date" id="passportExpiry" value={formData.passportExpiry} onChange={handleInputChange}/>
+                            <div className="input-group">
+                              <input
+                                  id="passportExpiry"
+                                  className="input form-input"
+                                  type="date"
+                                  value={formData.passportExpiry}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({ ...prev, passportExpiry: e.target.value }))
+                                  }
+                              />
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className="btn-container">
-                    <button className="btn-default form-btn-save" id="user-btn-save" type="button">
+                    <button className="btn-default form-btn-save" id="user-btn-save" type="button"  onClick={handleFormSave}>
                         <div className="text">Lưu</div>
                     </button>
-                    <button className="btn-default form-btn-reset" id="user-btn-clear" type="button">
+                    <button className="btn-default form-btn-reset" id="user-btn-clear" type="button" onClick={handleFormCancel}>
                         <div className="text">Hủy</div>
                     </button>
                 </div>
+            </form>
+            <div class="pane-label">
+              <div class="label-text">Bảo mật & Mật khẩu</div>
+            </div>
+            <form class="info-form" id="password-info-form">
+              <div class="form-content">
+                <div class="info-col" id="password-info-col">
+                  <div class="input-block">
+                    <div class="title">
+                        <div class="text">
+                          Mật khẩu hiện tại:
+                        </div>
+                    </div>
+                    <input class="input form-input" type="password" id="oldPassword" value={formPasswordData.oldPassword} onChange={handleInputPasswordChange}/>
+                  </div>
+                  <div class="input-block">
+                    <div class="title">
+                        <div class="text">
+                          Mật khẩu mới:
+                        </div>
+                    </div>
+                    <input class="input form-input" type="password" id="newPassword" value={formPasswordData.newPassword} onChange= {handleInputPasswordChange}/>
+                  </div>
+                  <div class="input-block">
+                    <div class="title">
+                        <div class="text">Nhập lại mật khẩu mới:</div>
+                    </div>
+                    <input class="input form-input" type="password" id="newPasswordConfirmation" value={formPasswordData.newPasswordConfirmation} onChange={handleInputPasswordChange}/>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-container">
+                <button class="btn-default form-btn-save" id="password-btn-save" type="button" onClick={handleFormPasswordSave}>
+                  <div class="text">Lưu</div>
+                </button>
+                <button class="btn-default form-btn-reset" id="password-btn-clear" type="reset" onClick={handleFormPasswordCancel}>
+                  <div class="text">Hủy</div>
+                </button>
+              </div>
             </form>
           </div>
         )}
