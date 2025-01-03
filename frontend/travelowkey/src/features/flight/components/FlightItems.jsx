@@ -1,4 +1,4 @@
-import { width } from "@fortawesome/free-solid-svg-icons/fa0";
+// import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 import React from "react";
 
 const FlightItems = ({ flights, passengers }) => {

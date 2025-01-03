@@ -1,3 +1,4 @@
+import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +7,9 @@ from .serializers import UserRegistrationSerializer, LoginSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.exceptions import TokenError
+from django.db import transaction, OperationalError
+import time
 # from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework.permissions import AllowAny
@@ -16,6 +20,8 @@ from google.auth import jwt
 from google.auth.transport.requests import Request
 from django.contrib.auth import get_user_model
 import requests
+from datetime import datetime
+from django.contrib.auth.hashers import check_password
 
 class RegisterUserView(APIView):
     def post(self, request):
@@ -97,10 +103,158 @@ class get_UserInfo(APIView):
             'expiration': passport.expiration if passport else None,
         }
         return Response(user_info, status=status.HTTP_200_OK)
+    
+# class update_UserInfo(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def put(self, request):
+#         change_fields = request.data.get('keys', [])
+#         change_values = request.data.get('values',[])
+#         if len(change_fields) != len(change_values):
+#             return Response({"error": "Fields and values length mismatch"}, status=status.HTTP_400_BAD_REQUEST)
+#         user = request.user
+#         passport_updated = False
+#         for field, value in zip(change_fields, change_values):
+#             if hasattr(user, field):
+#                 setattr(user, field, value)
+#             elif field in ['nation', 'expiration'] and user.passport_id:
+#                 setattr(user.passport_id, field, value)
+#                 passport_updated = True
+#             else:
+#                 return Response({"error": f"Invalid field: {field}"}, status=status.HTTP_400_BAD_REQUEST)
+#         user.save()
+#         if passport_updated:
+#             user.passport_id.save()
 
+#         response = {
+#             'message': 'User info updated',
+#             # 'email': user.email,
+#             # 'phone': user.phone,
+#             # 'name': user.name,
+#             # 'sex': user.sex,
+#             # 'birthday': user.birthday,
+#             # 'nationality': user.nationality,
+#             # 'nation': user.passport_id.nation if user.passport_id else None,
+#             # 'expiration': user.passport_id.expiration if user.passport_id else None,
+#         }
+#         return Response(response, status=status.HTTP_200_OK)
+    
+class UpdateUserInfoView(APIView):
+    permission_classes = [AllowAny]
 
+    def put(self, request):
+        data = request.data
+        user = request.user
+        passport = user.passport_id
+        
+
+        # Update fields directly
+        username = data.get('name', user.username)
+        phone_number = data.get('phone', user.phone_number)
+        email = data.get('email', user.email)
+        gender = data.get('gender', user.gender)
+        nationality = data.get('nationality', user.nationality)
+        passport_nation = data.get('passportNation', passport.nation)
+        passport_expiration = data.get('passportExpiry', passport.expiration)
+        # score = data.get('score', user.score)
+        # passport_id = data.get('passport_id', user.passport_id)
+
+        # Convert birthdate from string to date object
+        birthdate = data.get('birthDate', user.birthdate)
+        print(birthdate)
+        if (birthdate == ""): birthdate = user.birthdate
+        if (passport_expiration == ""): passport_expiration= passport.expiration
+        if birthdate and birthdate != "":
+            try:
+                birthdate = datetime.strptime(birthdate, "%Y-%m-%d").date()
+            except ValueError:
+                return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if passport_expiration and passport_expiration !="":
+            try:
+                passport_expiration = datetime.strptime(passport_expiration, "%Y-%m-%d").date()
+            except ValueError:
+                return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+            
+
+        # Update user fields
+        user.username = username
+        user.phone_number = phone_number
+        user.email = email
+        user.gender = gender
+        user.nationality = nationality
+        user.birthdate = birthdate
+
+        passport.nation = passport_nation
+        passport.expiration = passport_expiration
+        # Save the user object
+        user.save()
+
+        passport.save()
+
+        # Construct response
+        response_data = {
+            "username": user.username,
+            "phone_number": user.phone_number,
+            "email": user.email,
+            "birthdate":user.birthdate,
+            "gender": user.gender,
+            "nationality": user.nationality,
+        }
+
+        return Response({"message": "User info updated successfully", "user": response_data}, status=status.HTTP_200_OK)
+
+class UpdatePasswordView(APIView):
+    permission_classes = [AllowAny]
+    def put(self, request):
+        user = request.user
+        data = request.data
+
+        oldPassword = data.get('oldPassword', "")
+        newPassword = data.get('newPassword', "")
+        newPasswordConfirmation = data.get('newPasswordConfirmation', "")
+        if newPassword != newPasswordConfirmation:
+            return Response({'error': 'New comfirmation password is wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        if not check_password(oldPassword, user.password):
+            return Response({'error': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(newPassword)
+        user.save()
+        return Response({'message': 'Cập nhật mật khẩu thành công'}, status=status.HTTP_200_OK)
 class VerifyUser(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         user = request.user
         return Response({"message": "User is authenticated", "user_id": user.id}, status=status.HTTP_200_OK)
+    
+class Logout(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh')
+            if not refresh_token:
+                return Response({'error': 'Refresh token is required.'}, status=status.HTTP_400_BAD_REQUEST)
+            refresh_token_obj = RefreshToken(refresh_token)
+            refresh_token_obj.blacklist()
+            return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        except TokenError as e:
+            return Response({'error': 'Token is already blacklisted or invalid.'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class check_Login(APIView):
+    permission_classes = [IsAuthenticated]
+    max_retries = 5
+    retry_delay = 1  
+
+    def get(self, request):
+        retries = 0
+        while retries < self.max_retries:
+            try:
+                with transaction.atomic():
+                    return Response({'message': 'Logged in'}, status=status.HTTP_200_OK)
+            except OperationalError as e:
+                if e.args[0] == 1213: 
+                    retries += 1
+                    time.sleep(self.retry_delay) 
+                else:
+                    return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Max retries exceeded due to deadlock'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
