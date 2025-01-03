@@ -45,7 +45,7 @@ export const loadUserInfo = async () => {
         window.location.href = '/user/login';
         return;
     }
-    const response = await fetch('http://127.0.0.1:8800/user/', {
+    const response = await fetch('http://127.0.0.1:8800/user/info/', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -63,8 +63,10 @@ export const loadUserInfo = async () => {
         accountInfo.nationality = accountInfo.nationality || '';
         accountInfo.nation = accountInfo.nation || '';
         accountInfo.expiration = accountInfo.expiration || '';
+        // const newToken = await refreshToken();
         return accountInfo;
     } else if (response.status === 401) {
+        alert(response.status);
         const newToken = await refreshToken();
         if (newToken) {
             await loadUserInfo();
@@ -75,3 +77,73 @@ export const loadUserInfo = async () => {
         window.location.href = '/user/login';
     }
 }
+
+export const saveUserInfo = async (formData) => {
+    let access_token = await getCookie('access_token');
+    // alert(JSON.stringify(formData))
+    if (!access_token) {
+        alert('Cần đăng nhập');
+        window.location.href = '/user/login';
+        return;
+    }
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8800/user/updateinfo/", {
+        method: "PUT", // Use POST or PUT based on your API
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${access_token}`, // Include the access token for authentication
+        },
+        body:  JSON.stringify(formData), // Send the updated form data
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        alert("User information saved successfully!");
+        console.log("Response:", result);
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to save user info:", errorData);
+        alert("Failed to save user information. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error while saving user info:", error);
+      alert(error)
+      alert("An error occurred. Please try again later.");
+    }
+};
+
+
+export const savePasswordInfo = async (formPasswordData) => {
+    let access_token = await getCookie('access_token');
+    if (!access_token) {
+        alert('Cần đăng nhập');
+        window.location.href = '/user/login';
+        return;
+    }
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8800/user/updatepassword/", {
+        method: "PUT", // Use POST or PUT based on your API
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${access_token}`, // Include the access token for authentication
+        },
+        body:  JSON.stringify(formPasswordData), // Send the updated form data
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        alert("User password saved successfully!");
+        console.log("Response:", result);
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to save user password:", errorData);
+        alert("Failed to save user password. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error while saving user password:", error);
+      alert(error)
+      alert("An error occurred. Please try again later.");
+    }
+};
