@@ -1,0 +1,7 @@
+.position-relative .bi-eye {
+  cursor: pointer;
+  color: #6c757d;
+}
+.position-relative .bi-eye:hover {
+  color: #495057;
+}

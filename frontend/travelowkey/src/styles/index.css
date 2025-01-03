@@ -1,0 +1,41 @@
+.disabled {
+  display: none !important;
+}
+
+.hide {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.show {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease;
+}
+
+.status-btn:hover, .status-btn:focus, .status-btn:not(:disabled):not(.disabled):active, .status-btn:not(:disabled):not(.disabled).active, .show > .status-btn.dropdown-toggle {
+  opacity: 0.8;
+  background: none !important;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 0px 0px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  background: transparent;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  width: auto;
+}/*# sourceMappingURL=index.css.map */
