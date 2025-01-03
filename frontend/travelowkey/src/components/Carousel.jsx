@@ -28,7 +28,7 @@ const CarouselComponent = ({useBackground}) => {
   }, []);
 
   return (
-    <div className={`container-fluid p-3 ${useBackground ? "bg-primary" : ""}`}>
+    <div className={`container-fluid p-3 ${useBackground ? "bg-primary opacity-75 z-n1" : ""}`}>
       {/* Carousel Container */}
       <div className={`carousel-container mx-auto d-flex align-items-center justify-content-center position-relative pt-5`}>
         {items.map((item, index) => {
@@ -37,7 +37,7 @@ const CarouselComponent = ({useBackground}) => {
             <img
               key={index}
               className={`img-fluid position-absolute ${className}`}
-              src={`/assets/images/hotel-ad-${index+1}.jpeg`}
+              src={`/assets/images/ad-${index+1}.jpeg`}
               loading="lazy"
               alt={item.alt}
             />

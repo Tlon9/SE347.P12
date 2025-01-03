@@ -6,6 +6,13 @@ import FlightResult from "../features/flight/pages/FlightResult";
 import HotelSearchScreen from "../features/hotel/pages/HotelSearch";
 import HotelResult from "../features/hotel/pages/HotelResult";
 import RoomResult from "../features/hotel/pages/RoomResult";
+import FlightPaymentScreen from "../features/payment/pages/FlightPayment";
+import HotelPaymentScreen from "../features/payment/pages/HotelPayment";
+import InvoiceScreen from "../features/payment/pages/Invoice";
+import HistoryPage from  "../features/payment/pages/History";
+import LoginScreen from "../features/user/pages/Login"
+import SignUpScreen from "../features/user/pages/SignUp"
+import AccountScreen from "../features/user/pages/Account"
 
 function AppRouter() {
   return (
@@ -17,6 +24,13 @@ function AppRouter() {
         <Route path="/hotel/search" element={<HotelSearchScreen />} />
         <Route path="/hotel/result" element={<HotelResult />} />
         <Route path="/room/result" element={<RoomResult />} />
+        <Route path="/payment/flight" element={<FlightPaymentScreen />} />
+        <Route path="/payment/hotel" element={<HotelPaymentScreen />} />
+        <Route path="/invoice" element={<InvoiceScreen />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/user/login" element={<LoginScreen />} />
+        <Route path="/user/signup" element={<SignUpScreen />} />
+        <Route path="/user/account" element={<AccountScreen/>} />
       </Routes>
     </Router>
   );

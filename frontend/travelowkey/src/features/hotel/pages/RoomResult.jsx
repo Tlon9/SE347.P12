@@ -31,7 +31,7 @@ const RoomResult = () => {
         <div>
             <HeaderContainer scrollFlag={true}/>
             <div className="container-fluid justify-content-center" style={{paddingTop:"8rem"}}></div>
-            <RoomResults rooms={rooms} formData={formData} url={url}/>
+            <RoomResults rooms={rooms} formData={formData}/>
             <Footer/>
         </div>
     );

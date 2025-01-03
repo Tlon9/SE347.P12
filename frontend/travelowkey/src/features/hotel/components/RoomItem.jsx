@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { search } from "ionicons/icons";
 
-const RoomItems = ({ rooms }) => {
+const RoomItems = ({ hotel,rooms, passengers, checkInDate, checkOutDate}) => {
   const changeMoneyFormat = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -11,6 +12,20 @@ const RoomItems = ({ rooms }) => {
 
   if (!rooms || rooms.length === 0) {
     return <div className="title">Không tìm thấy khách sạn phù hợp</div>;
+  }
+
+  const navigateToPaymentScreen = (hotel,room,passengers) => {
+    const params = new URLSearchParams({
+      room_id: room.Id,
+        room_name: room.Name,
+        room_price: room.Price,
+        room_service: room.Service,
+        passengers: passengers,
+        hotel: hotel,
+        check_in_date: checkInDate,
+        check_out_date: checkOutDate,
+    }).toString();
+    window.location.href = `/payment/hotel?${params}`;
   }
 
   return (
@@ -85,13 +100,14 @@ const RoomItems = ({ rooms }) => {
                     className="room-price text-end"
                     style={{ fontSize: "0.9rem", lineHeight: "1rem" }}
                     >
-                        <div className="price-text fw-bold">{changeMoneyFormat(room.Price)}</div>
+                        <div className="price-text text-danger fw-bold">{changeMoneyFormat(room.Price)}</div>
                     </div>
                     <div className="row mt-2">
                         <div className="col d-flex justify-content-end">
                             <button
-                            className="btn btn-secondary text-white"
+                            className="btn btn-primary text-white"
                             style={{ fontSize: "0.9rem", width: "100px" }}
+                            onClick={() => navigateToPaymentScreen(hotel,room, passengers)}
                             >
                             Chọn
                             </button>

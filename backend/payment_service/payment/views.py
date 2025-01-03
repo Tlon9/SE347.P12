@@ -6,12 +6,15 @@ import requests
 import qrcode
 from io import BytesIO
 from django.conf import settings
+from db_connection import redis_client
 
 @csrf_exempt
 def payment_callback(request):
     if request.method == 'GET':
         message = request.GET.get('message', '')
         transaction_id = request.GET.get('orderId')
+        service = request.GET.get('service')  
+        use_score = request.GET.get('use_score')  
 
         # Update transaction status in the database
         if transaction_id:
@@ -20,17 +23,56 @@ def payment_callback(request):
                 {'_id': transaction_id},
                 {'$set': {'status': status}}
             )
-            order_info = request.GET.get('orderInfo').split('-')
-            id = order_info[1]
-            passenger = order_info[2]
-            update_url = f"http://127.0.0.1:8000/flights/updateFlight?id={id}&passenger={passenger}"
-            try:
-                requests.put(update_url)
-            except Exception as e:
-                print(f"Error updating flight {order_info[0]}: {e}")
+            if status == 'SUCCESS':
+                transaction = transaction_collection.find_one({'_id': transaction_id})
+                new_score = int(transaction['amount'] // 10000)
+                update_url = f"http://127.0.0.1:8080/payment/notification/?transaction_id={transaction_id}"
+                getscore_url = f"http://127.0.0.1:8800/user/score/"
+                access_token = request.headers.get('Authorization').split(' ')[1]
+                headers = {'Authorization': f'Bearer {access_token}'}
+                if use_score == 'true':
+                    old_score = 0
+                else:
+                    old_score = requests.get(getscore_url, headers=headers).json()['score']
+                try:
+                    requests.put(f"http://127.0.0.1:8800/user/score/update/", headers=headers, data={'score': old_score + new_score})
+                except Exception as e:
+                    print(f"Error updating notification for transaction {transaction_id}: {e}")
+                try:
+                    requests.post(update_url, headers=headers)
+                except Exception as e:
+                    print(f"Error updating notification for transaction {transaction_id}: {e}")
+                user_id = transaction_collection.find_one({'_id': transaction_id})['user_id']
+                cache_key = f"user_history:{user_id}" 
+                redis_client.delete(cache_key)
 
-            # Generate a QR code for the transaction
-            create_qr(transaction_id,id,passenger)
+            if service == 'flight':
+                # Update the flight status  
+                order_info = request.GET.get('orderInfo').split('-')
+                id = order_info[0]
+                passenger = order_info[1]
+                update_url = f"http://127.0.0.1:8000/flights/updateFlight?id={id}&passenger={passenger}"
+                try:
+                    requests.put(update_url)
+                except Exception as e:
+                    print(f"Error updating flight {order_info[0]}: {e}")
+
+                # Generate a QR code for the transaction
+                create_flight_qr(transaction_id,id,passenger)
+            elif service == 'hotel':
+                # Update the hotel status
+                order_info = request.GET.get('orderInfo').split('_')
+                hotel_id = order_info[0]
+                room_id = order_info[1]
+                check_in = order_info[2]
+                check_out = order_info[3]
+                update_url = f"http://127.0.0.1:8008/hotels/updateRoom?room_id={room_id}&hotel_id={hotel_id}&check_in={check_in}&check_out={check_out}"
+                print('update_url:',update_url)
+                try:
+                    requests.put(update_url)
+                except Exception as e:
+                    print(f"Error updating hotel {hotel_id}: {e}")
+                create_hotel_qr(transaction_id,room_id,check_in,check_out)
         # HTML response with countdown animation
         html_response = f"""
         <html>
@@ -88,10 +130,39 @@ def payment_callback(request):
 
 
 
-def create_qr(transaction_id,id,pasenger):
+def create_flight_qr(transaction_id,id,pasenger):
+    try:
+        save_path = settings.MEDIA_ROOT
+        try:
+            flight = requests.get(f"http://127.0.0.1:8000/flights/getFlight?id={id}").json()
+            qr_content = f"Transaction ID:{transaction_id}\n Flight ID: {id}\nFrom: {flight['From']}\nTo: {flight['To']}\nDate: {flight['Date']}\nPassenger: {pasenger}\nSeat Class: {flight['SeatClass']}"
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(qr_content)
+            qr.make(fit=True)
+            img = qr.make_image(fill='black', back_color='white')
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            file_name = f"flight_{transaction_id}.png"
+        except Exception as e:
+            print(f"Error getting flight {id}: {e}")
+        # Save the QR code image to the server
+        try:
+            with open(f"{save_path}/{file_name}", "wb") as f:
+                f.write(buffer.getvalue())
+        except Exception as e:
+            print(f"Error saving QR code for flight {id}: {e}")
+    except Exception as e:
+        print(f"Error creating QR code for flight {id}: {e}")
+
+def create_hotel_qr(transaction_id,room_id,check_in,check_out):
     save_path = settings.MEDIA_ROOT
-    flight = requests.get(f"http://127.0.0.1:8000/flights/getFlight?id={id}").json()
-    qr_content = f"Transaction ID:{transaction_id}\n Flight ID: {id}\nFrom: {flight['From']}\nTo: {flight['To']}\nDate: {flight['Date']}\nPassenger: {pasenger}\nSeat Class: {flight['SeatClass']}"
+    room = requests.get(f"http://127.0.0.1:8008/hotels/getRoom?room_id={room_id}").json()
+    qr_content = f"Transaction ID:{transaction_id}\n Room ID: {room_id}\nRoom Name: {room['Name']}\nCheck-in: {check_in}\nCheck-out: {check_out}"
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -103,7 +174,7 @@ def create_qr(transaction_id,id,pasenger):
     img = qr.make_image(fill='black', back_color='white')
     buffer = BytesIO()
     img.save(buffer, format="PNG")
-    file_name = f"flight_{transaction_id}.png"
+    file_name = f"hotel_{transaction_id}.png"
     # Save the QR code image to the server
     with open(f"{save_path}/{file_name}", "wb") as f:
         f.write(buffer.getvalue())

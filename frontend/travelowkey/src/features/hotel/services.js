@@ -9,7 +9,7 @@ export const getToday = () => {
     // Function to fetch locations data
 export const fetchAreas = async () => {
     try {
-        const response = await fetch("http://127.0.0.1:8000/hotels/searchInfo/", {
+        const response = await fetch("http://127.0.0.1:8008/hotels/searchInfo/", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         });
@@ -29,7 +29,7 @@ export const fetchAreas = async () => {
 export const fetchHotels = async (url, offset, limit, selectedSortType) => {
     url = new URL(url);
     const searchParams = new URLSearchParams(url.search);
-    const urlRequest = `http://127.0.0.1:8000/hotels/results?area=${searchParams.get("location")}&offset=${offset}&limit=${limit}`;
+    const urlRequest = `http://127.0.0.1:8008/hotels/results?area=${searchParams.get("location")}&offset=${offset}&limit=${limit}`;
     try {
     const response = await fetch(urlRequest, {
         method: "GET",
@@ -52,7 +52,9 @@ export const fetchHotels = async (url, offset, limit, selectedSortType) => {
 export const fetchRooms = async (url) => {
     url = new URL(url);
     const searchParams = new URLSearchParams(url.search);
-    const urlRequest = `http://127.0.0.1:8000/hotels/results_room?Hotel_id=${searchParams.get("hotelID")}`;
+    const checkInDate = searchParams.get("checkInDate").split("-").reverse().join("-");
+    const checkOutDate = searchParams.get("checkOutDate").split("-").reverse().join("-");
+    const urlRequest = `http://127.0.0.1:8008/hotels/results_room?Hotel_id=${searchParams.get("hotelID")}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
     try {
     const response = await fetch(urlRequest, {
         method: "GET",

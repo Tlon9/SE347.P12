@@ -32,8 +32,8 @@ const HotelItems = ({ hotels, formData }) => {
     <div id="hotel-container" className="container">
         {hotels.map((hotel) => (
             <div
-            key={hotel.id}
-            id={`hotel-item-${hotel.id}`}
+            key={hotel.Id}
+            id={`hotel-item-${hotel.Id}`}
             className="hotel-item mb-3 p-2 border rounded shadow d-flex align-items-center"
             >
             {/* Left: Image */}
@@ -53,7 +53,7 @@ const HotelItems = ({ hotels, formData }) => {
             {/* Right: Hotel Details */}
             <div className="hotel-details w-100">
                 <h5 className="hotel-name fw-bold" style={{ fontSize: "1rem" }}>
-                {hotel.name}
+                {hotel.Name}
                 </h5>
                 <div
                 className="hotel-address mb-1 text-muted"
@@ -75,12 +75,12 @@ const HotelItems = ({ hotels, formData }) => {
                 className="hotel-price text-end"
                 style={{ fontSize: "0.9rem", lineHeight: "1rem" }}
                 >
-                <div className="price-text fw-bold">{changeMoneyFormat(hotel.Price)}</div>
+                <div className="price-text text-danger fw-bold px-3">{changeMoneyFormat(hotel.Price)}</div>
                 </div>
                 <div className="row mt-2">
                 <div className="col d-flex justify-content-end">
                     <button
-                    className="btn btn-secondary text-white"
+                    className="btn btn-primary text-white"
                     style={{ fontSize: "0.9rem", width: "100px" }}
                     onClick={() => handleSubmit(hotel.Id, hotel.Name)}
                     >
@@ -147,17 +147,17 @@ const HotelItems = ({ hotels, formData }) => {
   );
 };
 
-HotelItems.propTypes = {
-  hotels: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      photo: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      stars: PropTypes.number.isRequired,
-      address: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};
+// HotelItems.propTypes = {
+//   hotels: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       photo: PropTypes.string.isRequired,
+//       name: PropTypes.string.isRequired,
+//       stars: PropTypes.number.isRequired,
+//       address: PropTypes.string.isRequired,
+//       price: PropTypes.number.isRequired,
+//     })
+//   ).isRequired,
+// };
 
 export default HotelItems;

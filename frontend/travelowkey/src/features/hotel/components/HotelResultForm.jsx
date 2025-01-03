@@ -129,13 +129,13 @@ const HotelResults = ({hotels,formData, url}) => {
                     </div>
                     <div className="col d-flex justify-content-end mt-3">
                             <button
-                            className="btn btn-secondary text-white mb-1 me-2"
+                            className="btn btn-primary text-white mb-1 me-2"
                             style={{ fontSize: "0.9rem", width: "100px"}}
                             >
                                 Áp dụng
                             </button>
                             <button
-                            className="btn btn-secondary text-white mb-1"
+                            className="btn btn-primary text-white mb-1"
                             style={{ fontSize: "0.9rem", width: "100px"}}
                             >
                                 Reset
@@ -173,7 +173,7 @@ const HotelResults = ({hotels,formData, url}) => {
                                 className={`bi ${
                                     selectedSortType === option
                                     ? "bi-circle-fill text-primary"
-                                    : "bi-circle text-secondary"
+                                    : "bi-circle text-primary"
                                 } me-2`}
                                 ></i>
                                 <div>{option}</div>
@@ -231,7 +231,7 @@ const HotelResults = ({hotels,formData, url}) => {
                         <div className="col d-flex justify-content-end"
                         style={{paddingRight: "5px"}}>
                             <button
-                            className="btn btn-secondary text-white mb-1"
+                            className="btn btn-primary text-white mb-1"
                             style={{ fontSize: "0.9rem", width: "100px"}}
                             >
                                 Áp dụng
@@ -245,7 +245,7 @@ const HotelResults = ({hotels,formData, url}) => {
                 <div className="bg-white rounded shadow p-3 d-flex justify-content-between align-items-start mb-3">
                     <div>
                     <div className="d-flex align-items-center">
-                        <div className="fw-bold"></div> {formData.location || "N/A"}
+                        <div className="fw-bold">{formData.location || "N/A"}</div> 
                     </div>
                     <div className="text-muted">
                     </div> {formData.checkInDate + " - " + formData.checkOutDate + " • " + formData.passengerCount + " người, " + formData.roomCount + " phòng"|| "N/A"}
@@ -259,15 +259,15 @@ const HotelResults = ({hotels,formData, url}) => {
                 <HotelItems hotels={hotels_} formData={formData} />
     
                 {/* Loading Block */}
-                <div className="text-center my-3">
+                {/* <div className="text-center my-3">
                     <div className="fw-bold text-primary">Đang tìm kiếm khách sạn</div>
                     <div className="my-2">
                     <img src="/path/to/loading.gif" alt="Loading" width="50" />
                     </div>
-                </div>
+                </div> */}
     
                 {/* Show More Button */}
-                <button className="btn btn-primary d-block mx-auto" onClick={loadMoreHotel}>Show more</button>
+                <button className="btn btn-primary d-block mx-auto my-3" onClick={loadMoreHotel}>Show more</button>
             </div>
         </div>
     );

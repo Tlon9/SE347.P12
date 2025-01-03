@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 // Reusable Recommendation Item
 const RecommendationItem = ({ id, label, text, backgroundImage, onClick }) => {
@@ -50,26 +49,16 @@ const FlightRecommendation = () => {
     DLI: '0',
     DAD: '0',
   });
-
-  const [hotelData, setHotelData] = useState({
-    HAN: '0',
-    SGN: '0',
-    DAD: '0',
-    VTU: '0',
-  });
-
   const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
   useEffect(() => {
     // Fetch Flight Data
-    axios.get(`/flight/api/recom-flight?date=${today}`).then((res) => {
-      setFlightData(res.data);
-    });
+    fetch(`http://127.0.0.1:8000/flights/getFlighCount?date=${today}`)
+      .then((response) => response.json())
+      .then((data) => setFlightData(data))
+      .catch((error) => console.error('Error fetching flight data:', error));
 
-    // Fetch Hotel Data
-    axios.get('/hotel/api/recom-hotel').then((res) => {
-      setHotelData(res.data);
-    });
+    
   }, []);
 
   const handleFlightClick = (location) => {
@@ -93,28 +82,28 @@ const FlightRecommendation = () => {
           id="item-hanoi-flight"
           label="Hà Nội"
           text={`Có ${flightData.HAN} chuyến bay`}
-          backgroundImage="/assets/images/hotel-recom-hanoi.jpeg"
+          backgroundImage="/assets/images/recom-hanoi.jpg"
           onClick={() => handleFlightClick('Hà Nội (HAN)')}
         />
         <RecommendationItem
           id="item-hcm-flight"
           label="Hồ Chí Minh"
           text={`Có ${flightData.SGN} chuyến bay`}
-          backgroundImage="/assets/images/hotel-recom-hcm.jpeg"
+          backgroundImage="/assets/images/recom-hcm.jpg"
           onClick={() => handleFlightClick('TP HCM (SGN)')}
         />
         <RecommendationItem
           id="item-danang-flight"
           label="Đà Nẵng"
           text={`Có ${flightData.DAD} chuyến bay`}
-          backgroundImage="/assets/images/recom-phuquoc.jpeg"
+          backgroundImage="/assets/images/recom-danang.jpg"
           onClick={() => handleFlightClick('Đà Nẵng (DAD)')}
         />
         <RecommendationItem
           id="item-dalat-flight"
           label="Đà Lạt"
           text={`Có ${flightData.DLI} chuyến bay`}
-          backgroundImage="/assets/images/recom-dalat.jpeg"
+          backgroundImage="/assets/images/recom-dalat.jpg"
           onClick={() => handleFlightClick('Đà Lạt (DLI)')}
         />
       </div>
