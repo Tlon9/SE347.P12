@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import flight_collection
 from django.http import HttpResponse, JsonResponse
-import datetime
+from datetime import datetime
 import requests
 
 class getSearchInfo(APIView):
@@ -123,10 +123,12 @@ class updateDB(APIView):
 class getRecommendedFlights(APIView):
     def get(self, request):
         try:
+            today = datetime.today().strftime('%d-%m-%Y')
+            
             user_id = request.query_params.get('user_id', None)
             user_location = request.query_params.get('user_location', None)
             is_new_user = requests.get(f'http://127.0.0.1:8080/payment/new_user?user_id={user_id}').json()['is_new_user'] if user_id else True
-            today = datetime.datetime.now().strftime('%d-%m-%Y')
+            
             recommendations = []
             
             if is_new_user:
@@ -134,20 +136,15 @@ class getRecommendedFlights(APIView):
                 popular_destinations = ["TP HCM (SGN)", "Hà Nội (HAN)", "Đà Nẵng (DAD)"]
                 for dest in popular_destinations:
                     flights = list(
-                        flight_collection.find({"To": dest, "Date": today})
+                        flight_collection.find({"To": dest, "Date": {"$gte": today}})
                             .sort("Price", 1)
                             .limit(3)
                     )
                     recommendations.extend(flights)
-                # recommendations = list(
-                #     flight_collection.find({"To": {"$in": popular_destinations}})
-                #         .sort("Price", 1)
-                #         .limit(10)
-                # )
             elif user_location:
                 # Known user location - recommend flights starting from user's location
                 recommendations = list(
-                    flight_collection.find({"From": user_location, "Date": today})
+                    flight_collection.find({"From": user_location, "Date": {"$gte": today}})
                         .sort("Price", 1)
                         .limit(10)
                 )
@@ -155,20 +152,19 @@ class getRecommendedFlights(APIView):
                 # Default recommendation logic (trending destinations)
                 recommendation_destinations = list(
                     flight_collection.aggregate([
+                        {"$match": {"Date": {"$gte": today}}},
                         {"$group": {"_id": "$To", "count": {"$sum": 1}}},
                         {"$sort": {"count": -1}},
                         {"$limit": 10}
                     ])
                 )
                 sum_of_count = sum([dest['count'] for dest in recommendation_destinations])
-                print('sum_of_count',sum_of_count)  
                 recommendations = []
                 for dest in recommendation_destinations:
                     count = int(dest['count'] / sum_of_count * 10)
-                    print(f'{dest["_id"]}: {count}')
                     if count > 0:
                         flights = list(
-                            flight_collection.find({"To": dest['_id'], "Date": today})
+                            flight_collection.find({"To": dest['_id'], "Date": {"$gte": today}})
                                 .sort("Price", 1)
                                 .limit(count)
                         )
@@ -183,6 +179,7 @@ class getRecommendedFlights(APIView):
         except Exception as e:
             print(f"Error: {e}")
             return Response({"message": "Failed to get recommended flights."}, status=status.HTTP_400_BAD_REQUEST)
+
         
 def count_flights(request):
     destinations = ["TP HCM (SGN)", "Hà Nội (HAN)", "Đà Nẵng (DAD)", "Đà Lạt (DLI)"]

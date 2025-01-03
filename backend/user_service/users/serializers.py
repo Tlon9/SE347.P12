@@ -17,7 +17,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             email = validated_data['email'],
             username = validated_data['username'],
             password = validated_data['password'],
-            passport_id = passport
+            passport_id = passport,
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -39,3 +39,8 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Invalid login credentials")
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'username', 'gender', 'birthdate', 'phone_number', 'nationality', 'passport_id', 'is_active', 'is_staff', 'is_superuser']
